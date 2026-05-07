@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MS Scheme 代理認證測驗</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --ivory: #FAF7F2;
+    --cream: #F3EDE3;
+    --rose: #C9A090;
+    --rose-deep: #A87060;
+    --rose-gold: #C8A882;
+    --blush: #EDD8CC;
+    --text: #2C2218;
+    --text-soft: #7A6B5E;
+    --border: #E2D5C8;
+    --correct: #7A9E7E;
+    --wrong: #C97070;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--ivory);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 40px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 120% at 50% -20%, rgba(200,168,130,0.15), transparent);
+    pointer-events: none;
+  }
+  .brand-tag {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--rose-gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  header h1 span { color: var(--rose); font-style: italic; }
+  .header-sub { font-size: 13px; color: var(--text-soft); margin-top: 8px; font-weight: 300; }
+
+  .progress-bar-wrap { background: var(--border); height: 3px; width: 100%; }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--rose), var(--rose-gold));
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  main { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ── NAME SCREEN ── */
+  #name-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 0 40px;
+    animation: fadeUp 0.5s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .name-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 2px 24px rgba(44,34,24,0.05);
+    text-align: center;
+  }
+  .name-icon {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+  .name-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    margin-bottom: 8px;
+  }
+  .name-card p {
+    font-size: 13px;
+    color: var(--text-soft);
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+  .name-input-wrap { position: relative; margin-bottom: 24px; }
+  .name-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--ivory);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .name-input:focus { border-color: var(--rose); }
+  .name-input::placeholder { color: var(--text-soft); opacity: 0.6; }
+  .start-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--rose);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .start-btn:hover { background: var(--rose-deep); }
+  .start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .name-note {
+    font-size: 11px;
+    color: var(--text-soft);
+    margin-top: 14px;
+    opacity: 0.7;
+  }
+
+  /* ── QUIZ ── */
+  #quiz-screen { display: none; animation: fadeUp 0.4s ease; }
+
+  .score-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    font-size: 13px;
+    color: var(--text-soft);
+  }
+  .score-card .current-q {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--rose);
+  }
+  .taker-name {
+    font-size: 12px;
+    color: var(--text-soft);
+    text-align: center;
+  }
+  .taker-name strong { color: var(--rose-deep); }
+
+  .question-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 36px 32px 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 20px rgba(44,34,24,0.04);
+  }
+  .q-category {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rose-gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .q-category::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .q-number { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--text-soft); margin-bottom: 10px; }
+  .q-text { font-size: 17px; font-weight: 400; line-height: 1.65; color: var(--text); margin-bottom: 28px; }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn {
+    border: 1.5px solid var(--border);
+    background: var(--ivory);
+    border-radius: 4px;
+    padding: 14px 18px;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--rose); background: #FBF5F0; transform: translateX(3px); }
+  .option-btn .opt-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--rose-gold);
+    min-width: 18px;
+    margin-top: 1px;
+  }
+  .option-btn.correct  { border-color: var(--correct); background: #F2F8F3; }
+  .option-btn.wrong    { border-color: var(--wrong); background: #FDF3F3; }
+  .option-btn:disabled { cursor: default; transform: none; }
+
+  .explanation {
+    margin-top: 20px;
+    padding: 18px 20px;
+    border-radius: 4px;
+    background: var(--cream);
+    border-left: 3px solid var(--rose-gold);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text-soft);
+    display: none;
+  }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--rose-deep); font-weight: 500; }
+
+  .next-btn {
+    margin-top: 24px;
+    display: none;
+    width: 100%;
+    padding: 16px;
+    background: var(--rose);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .next-btn:hover { background: var(--rose-deep); }
+  .next-btn.show { display: block; }
+
+  /* ── RESULT ── */
+  #result-screen { display: none; text-align: center; padding: 40px 0; animation: fadeUp 0.5s ease; }
+  .result-icon { font-size: 56px; margin-bottom: 16px; }
+  .result-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: var(--text); margin-bottom: 8px; }
+  .result-taker { font-size: 13px; color: var(--text-soft); margin-bottom: 4px; }
+  .result-taker strong { color: var(--rose-deep); }
+  .result-score-big { font-family: 'Cormorant Garamond', serif; font-size: 72px; font-weight: 300; color: var(--rose); line-height: 1; margin: 16px 0; }
+  .result-score-big span { font-size: 28px; color: var(--text-soft); }
+  .result-desc { font-size: 15px; color: var(--text-soft); line-height: 1.7; max-width: 440px; margin: 0 auto 24px; }
+  .result-badge { display: inline-block; padding: 8px 24px; border: 1px solid var(--rose-gold); border-radius: 2px; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--rose-gold); margin-bottom: 28px; }
+
+  /* Submit status */
+  .submit-status {
+    margin: 0 auto 24px;
+    max-width: 360px;
+    padding: 14px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    display: none;
+  }
+  .submit-status.sending { background: #FBF5F0; border: 1px solid var(--border); color: var(--text-soft); display: block; }
+  .submit-status.success { background: #F2F8F3; border: 1px solid var(--correct); color: #5A7E5E; display: block; }
+  .submit-status.error   { background: #FDF3F3; border: 1px solid var(--wrong); color: #A05050; display: block; }
+
+  .retry-btn {
+    padding: 14px 40px;
+    background: transparent;
+    border: 1.5px solid var(--rose);
+    color: var(--rose);
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+  }
+  .retry-btn:hover { background: var(--rose); color: #fff; }
+
+  .knowledge-note { margin-top: 40px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .knowledge-note-header { background: var(--cream); padding: 14px 20px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose-gold); border-bottom: 1px solid var(--border); }
+  .knowledge-note-body { padding: 20px; font-size: 13.5px; color: var(--text-soft); line-height: 1.8; }
+  .knowledge-note-body ul { list-style: none; }
+  .knowledge-note-body li { padding: 4px 0; padding-left: 16px; position: relative; }
+  .knowledge-note-body li::before { content: '—'; position: absolute; left: 0; color: var(--rose-gold); }
+
+  @media (max-width: 600px) {
+    header { padding: 28px 20px 22px; }
+    header h1 { font-size: 24px; }
+    main { padding: 28px 16px 60px; }
+    .name-card { padding: 32px 24px; }
+    .question-card { padding: 24px 20px 20px; }
+    .q-text { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-tag">MS Scheme · La Prime</div>
+  <h1>代理認證測驗<br><span>產品專業知識考核</span></h1>
+  <p class="header-sub">完成10題，確認您具備向客戶專業說明的能力</p>
+</header>
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressBar"></div>
+</div>
+
+<main>
+
+  <!-- NAME SCREEN -->
+  <div id="name-screen">
+    <div class="name-card">
+      <div class="name-icon">🌸</div>
+      <h2>歡迎參加認證測驗</h2>
+      <p>請先填寫您的姓名，成績將自動回傳給倪倪。<br>共10題，每題皆有詳細解析。</p>
+      <div class="name-input-wrap">
+        <input class="name-input" id="nameInput" type="text" placeholder="請輸入您的真實姓名" maxlength="20" oninput="checkName()" />
+      </div>
+      <button class="start-btn" id="startBtn" onclick="startQuiz()" disabled>開始測驗 →</button>
+      <p class="name-note">📋 成績會自動記錄，無需截圖</p>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen">
+    <div class="score-card">
+      <div>
+        <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-soft);margin-bottom:4px;">題目進度</div>
+        <div class="current-q"><span id="qNum">1</span> <span style="font-size:16px;color:var(--text-soft)">/</span> 10</div>
+      </div>
+      <div class="taker-name">作答者：<strong id="displayName"></strong></div>
+      <div style="text-align:right">
+        <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-soft);margin-bottom:4px;">答對</div>
+        <div class="current-q" style="color:var(--correct)"><span id="correctCount">0</span></div>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-category" id="qCategory"></div>
+      <div class="q-number" id="qNumber"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="explanation" id="explanation"></div>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">下一題 →</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="result-screen">
+    <div class="result-icon" id="resultIcon">🌸</div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-taker">作答者：<strong id="resultName"></strong></div>
+    <div class="result-score-big" id="resultScore">0<span>/10</span></div>
+    <div class="result-badge" id="resultBadge"></div>
+    <div class="result-desc" id="resultDesc"></div>
+    <div class="submit-status" id="submitStatus"></div>
+    <button class="retry-btn" onclick="restartQuiz()">重新測驗</button>
+
+    <div class="knowledge-note">
+      <div class="knowledge-note-header">代理必知核心觀念 · 快速複習</div>
+      <div class="knowledge-note-body">
+        <ul>
+          <li>私密處屬黏膜組織，無角質層，吸收力強，成分安全性要求極高</li>
+          <li>健康私密 pH 值應維持 3.8–4.5，支持乳酸桿菌生長</li>
+          <li>血液、精液（pH≈7）、抗生素使用均會破壞酸鹼平衡</li>
+          <li>禁止用大量清水或沖洗液直接灌洗陰道，會破壞保護機制</li>
+          <li>Ocaline（OKN）：法國海水+西葫蘆籽萃取，抑制組織胺，緩解發炎</li>
+          <li>日本柿子單寧：直接分解異味分子（氨、硫化物），非覆蓋</li>
+          <li>一枝黃花：抑制念珠菌轉為菌絲型，但不殺乳酸好菌</li>
+          <li>秘境寶乳酸專利：維持 pH 3.8–4.5 長達12小時以上</li>
+          <li>56天嫩白專利：可下降52%色素沉澱（抑制酪胺酸酶）</li>
+          <li>使用後更癢/豆腐渣排出屬正常排毒反應，建議連續使用2–3天</li>
+          <li>性行為前塗外部滋潤，事後注入做深層修復</li>
+          <li>更年期/放療後建議每週1–2支日常護理</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── CONFIG ──
+const SHEET_ID = '1V7lnM3zyufzxu1FZ0r5ERHr0vMBZSDQ9tqsnWrVl4NU';
+
+// ── DATA ──
+const questions = [
+  {
+    category: "私密健康基礎",
+    text: "私密處黏膜與一般皮膚最大的差異是什麼？這對產品選擇有什麼影響？",
+    options: [
+      "黏膜有厚實角質層，吸收力弱，一般保養品皆可使用",
+      "黏膜無角質層，吸收力極強，因此成分安全性要求遠高於一般皮膚",
+      "黏膜的自我修復力比皮膚強，不需要特別保養",
+      "黏膜與皮膚吸收力相同，差異在於濕度不同"
+    ],
+    correct: 1,
+    explanation: "私密處屬黏膜組織，沒有角質層這道保護屏障，吸收力比一般皮膚強很多。這表示任何接觸到私密處的成分都會快速進入體內，因此必須選擇極度安全、無重金屬、無防腐劑的產品。"
+  },
+  {
+    category: "酸鹼值知識",
+    text: "健康私密處的 pH 值範圍應維持在多少？哪些因素會破壞這個平衡？",
+    options: [
+      "pH 6.5–7.5，鹼性環境有利好菌生長；破壞因素是過度清潔",
+      "pH 3.8–4.5，微酸性；血液、精液（pH≈7）及抗生素使用都會破壞平衡",
+      "pH 5.5–6.0，與一般皮膚相同；主要破壞因素是內衣材質",
+      "pH 4.5–5.5，只有抗生素會破壞平衡，性行為不影響"
+    ],
+    correct: 1,
+    explanation: "健康私密處需維持 pH 3.8–4.5 的微酸環境，才能讓乳酸桿菌（好菌）生存。血液（經血）、精液（pH 約7）以及抗生素使用，都會暫時拉高 pH 值，讓壞菌有機可乘。這也是為什麼生理期後連續使用產品特別有幫助。"
+  },
+  {
+    category: "核心成分解析",
+    text: "產品中的「一枝黃花」成分，主要功能是什麼？為什麼它比一般抗菌成分更有優勢？",
+    options: [
+      "直接殺死所有細菌，包括好菌和壞菌，徹底清潔",
+      "只覆蓋異味，本身沒有抗菌功能",
+      "抑制念珠菌從無害單細胞型態轉化為具侵蝕性的菌絲型態，且不殺乳酸好菌",
+      "補充好菌數量，使乳酸桿菌大量增生"
+    ],
+    correct: 2,
+    explanation: "一枝黃花的聰明之處在於「精準打擊」——它阻止念珠菌從無害的單細胞「切換」成具有侵蝕力的菌絲形態，讓它無法為害；同時保留了乳酸桿菌等好菌的生存空間。這和一般廣效抗菌成分「好壞通殺」完全不同。"
+  },
+  {
+    category: "異味處理機制",
+    text: "日本柿子單寧專利成分處理異味的方式，與一般香氛產品有何本質差異？",
+    options: [
+      "釋放更濃的香氛分子，蓋過原本的異味",
+      "直接分解造成異味的氨與硫化物分子，從根源消除，而非遮蓋",
+      "透過抗生素成分殺死產生異味的細菌",
+      "調整 pH 值間接降低異味，需要7天以上才有效"
+    ],
+    correct: 1,
+    explanation: "柿子單寧專利能直接和氨分子、硫化物等異味來源「結合分解」，讓它們消失，而非用香味掩蓋。這是說明產品差異化的重要話術點——La Prime 是真正解決根本，不是遮蓋。"
+  },
+  {
+    category: "秘境寶乳酸專利",
+    text: "產品中的「秘境寶」乳酸專利，與一般市售低成本乳酸成分的關鍵差異為何？",
+    options: [
+      "兩者功能相同，只是濃度不同，高濃度的效果更持久",
+      "秘境寶能維持 pH 3.8–4.5 長達12小時以上，一般乳酸則效果短暫",
+      "一般乳酸可以直接補充好菌，秘境寶只能調整酸鹼值",
+      "秘境寶成分較溫和，但維持時間與一般乳酸相同"
+    ],
+    correct: 1,
+    explanation: "一般乳酸成分價格低廉，加進去讓產品顯示有「調節pH」，但實際上效果很短。秘境寶乳酸專利能讓私密處的微酸環境維持12小時以上，讓好菌持續有適合生長的環境。這是技術門檻，也是品質差異的關鍵。"
+  },
+  {
+    category: "嫩白緊實功效",
+    text: "關於產品的嫩白專利效果，代理應該如何向客戶正確說明？",
+    options: [
+      "使用3天立即可見明顯嫩白效果",
+      "透過物理方式磨去黑色素，效果永久不復發",
+      "抑制酪胺酸酶形成，數據顯示56天可下降約52%的色素沉澱",
+      "採用漂白成分快速去除黑色素，但需注意刺激感"
+    ],
+    correct: 2,
+    explanation: "嫩白是透過抑制「酪胺酸酶」這個黑色素生成的關鍵酵素來發揮作用，有臨床數據支持：56天可使色素沉澱下降約52%。說明時要清楚是「漸進式」改善，幫助客戶設定合理期待。"
+  },
+  {
+    category: "正確使用方式",
+    text: "代理輔導客戶性行為前後使用產品的正確方式為何？",
+    options: [
+      "只能在性行為結束後使用，前使用可能影響天然潤滑",
+      "性行為前注入整支做預防，結束後不需再使用",
+      "性行為前可塗抹半支於外部做滋潤，結束後注入剩餘半支做深層修復",
+      "性行為前後各注入一整支效果最佳"
+    ],
+    correct: 2,
+    explanation: "前半支塗抹外部增加滋潤感、減少摩擦；後半支深入做修復，處理因為行為中可能造成的微環境改變。讓客戶覺得使用場景豐富，不只是保養，也是親密關係的照顧，提升回購動機。"
+  },
+  {
+    category: "排毒反應處理",
+    text: "客戶使用產品後反映「更癢」或有「豆腐渣狀分泌物」，你應該如何回應？",
+    options: [
+      "立即建議停止使用，可能對成分過敏，需看婦產科",
+      "告知這是正常的「排毒反應」，壞菌正在排出，建議連續使用2–3天加速排出",
+      "詢問是否有更換新產品，可能是成分互斥",
+      "建議搭配服用益生菌，產品效果才會更好"
+    ],
+    correct: 1,
+    explanation: "當壞菌環境被打破時，它們會先「反彈」再被排出，癢感和排出物是過程的一部分。建議連續使用2–3天，幫助體內菌叢重新建立平衡。這個話術能大幅提升客戶完課率，不讓代理在這裡退縮。"
+  },
+  {
+    category: "特殊族群應用",
+    text: "更年期女性與癌症放療後患者使用產品的原因及建議頻率為何？",
+    options: [
+      "此族群不適合使用，荷爾蒙失調需先就醫治療",
+      "荷爾蒙減少造成黏膜萎縮乾燥，建議每週1–2支進行日常護理滋潤",
+      "只需要在感到不適時偶爾使用一次即可",
+      "更年期族群使用頻率與一般保養相同，每週一支"
+    ],
+    correct: 1,
+    explanation: "更年期後荷爾蒙急劇下降，陰道黏膜失去潤滑，嚴重者連婦科例行檢查的器械都難以進入。放療患者情況更嚴重。這個族群有最迫切的需求，建議每週1–2支進行持續護理，也是回購最穩定的客群之一。"
+  },
+  {
+    category: "競品對比 · 安全性",
+    text: "與市場上其他同類產品相比，La Prime 在安全性上有哪些具體優勢？",
+    options: [
+      "含有低劑量抗生素，所以能快速有效殺菌",
+      "添加銀離子成分，抑菌效果最強",
+      "無重金屬、無防腐劑（Paraben），通過 SGS 24小時長效抑菌認證，適合敏感肌",
+      "成分全天然，不含任何化學合成物"
+    ],
+    correct: 2,
+    explanation: "說明競品差異時，強調的是「沒有什麼」和「認證了什麼」。無重金屬（避免銀離子累積風險）、無Paraben防腐劑，通過SGS認證可針對大腸桿菌和念珠菌達到24小時長效抑菌。這些數據是說服猶豫客戶、打消安全疑慮的核心論據。"
+  }
+];
+
+// ── STATE ──
+let current = 0, score = 0, answered = false;
+let takerName = '';
+let answers = []; // 'O' or 'X' per question
+
+// ── NAME SCREEN ──
+function checkName() {
+  const v = document.getElementById('nameInput').value.trim();
+  document.getElementById('startBtn').disabled = v.length < 2;
+}
+
+function startQuiz() {
+  takerName = document.getElementById('nameInput').value.trim();
+  if (!takerName) return;
+  document.getElementById('name-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  document.getElementById('displayName').textContent = takerName;
+  answers = [];
+  renderQuestion();
+}
+
+// ── QUIZ ──
+function renderQuestion() {
+  const q = questions[current];
+  document.getElementById('qNum').textContent = current + 1;
+  document.getElementById('qCategory').textContent = q.category;
+  document.getElementById('qNumber').textContent = `Question ${String(current+1).padStart(2,'0')}`;
+  document.getElementById('qText').textContent = q.text;
+  document.getElementById('explanation').className = 'explanation';
+  document.getElementById('explanation').innerHTML = '';
+  document.getElementById('nextBtn').className = 'next-btn';
+
+  const labels = ['A', 'B', 'C', 'D'];
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="opt-label">${labels[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i);
+    container.appendChild(btn);
+  });
+
+  document.getElementById('progressBar').style.width = `${(current / 10) * 100}%`;
+  answered = false;
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+
+  if (idx === q.correct) {
+    btns[idx].classList.add('correct');
+    score++;
+    answers.push('O');
+    document.getElementById('correctCount').textContent = score;
+  } else {
+    btns[idx].classList.add('wrong');
+    btns[q.correct].classList.add('correct');
+    answers.push('X');
+  }
+
+  const exp = document.getElementById('explanation');
+  exp.innerHTML = `<strong>解析：</strong>${q.explanation}`;
+  exp.classList.add('show');
+
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.classList.add('show');
+  nextBtn.textContent = current < 9 ? '下一題 →' : '查看成績 →';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) showResult();
+  else renderQuestion();
+}
+
+// ── RESULT + SUBMIT ──
+function showResult() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+  document.getElementById('progressBar').style.width = '100%';
+
+  document.getElementById('resultScore').innerHTML = `${score}<span>/10</span>`;
+  document.getElementById('resultName').textContent = takerName;
+
+  let icon, title, badge, desc;
+  if (score >= 9) {
+    icon = '🌸'; title = '專業認證通過'; badge = '✦ 金牌代理認證';
+    desc = `滿分通過！你對 La Prime 產品的認知達到專業代理水準，無論是成分說明、使用時機或客訴處理，都能自信應對。`;
+  } else if (score >= 7) {
+    icon = '✨'; title = '基礎紮實，持續精進'; badge = '✦ 銀牌代理資格';
+    desc = `答對 ${score}/10 題，基礎觀念良好。建議複習下方「代理必知核心觀念」，特別留意成分機制與特殊族群應用。`;
+  } else if (score >= 5) {
+    icon = '📖'; title = '需要加強複習'; badge = '✦ 學習中';
+    desc = `答對 ${score}/10 題。建議仔細閱讀下方核心觀念，再次挑戰測驗，達到8分以上才能自信開口說明產品。`;
+  } else {
+    icon = '💡'; title = '再深入學習一次'; badge = '✦ 重新學習';
+    desc = `答對 ${score}/10 題。先把下方的核心觀念完整讀一遍，帶著理解再重測。知識不扎實，說話會沒有底氣。`;
+  }
+
+  document.getElementById('resultIcon').textContent = icon;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultBadge').textContent = badge;
+  document.getElementById('resultDesc').textContent = desc;
+
+  submitToSheets();
+}
+
+async function submitToSheets() {
+  const status = document.getElementById('submitStatus');
+  status.className = 'submit-status sending';
+  status.textContent = '⏳ 成績上傳中...';
+
+  const now = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
+  const levelMap = { 9: '金牌', 8: '金牌', 7: '銀牌', 6: '銀牌', 5: '學習中', 4: '學習中', 3: '重新學習', 2: '重新學習', 1: '重新學習', 0: '重新學習', 10: '金牌' };
+  const level = score >= 9 ? '金牌認證' : score >= 7 ? '銀牌資格' : score >= 5 ? '學習中' : '重新學習';
+
+  const rowData = [takerName, score, level, now, ...answers];
+
+  try {
+    const response = await fetch(`https://api.anthropic.com/v1/messages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        mcp_servers: [{
+          type: 'url',
+          url: 'https://googlesheets.run.tools',
+          name: 'google-sheets'
+        }],
+        messages: [{
+          role: 'user',
+          content: `Please append one row to Google Spreadsheet ID "${SHEET_ID}", sheet name "Sheet1".
+The row data (in order) is: ${JSON.stringify(rowData)}
+The columns are: 姓名, 分數, 等級, 答題時間, Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10
+Just do it directly, no explanation needed.`
+        }]
+      })
+    });
+
+    if (response.ok) {
+      status.className = 'submit-status success';
+      status.textContent = '✅ 成績已成功送出，倪倪會看到你的結果！';
+    } else {
+      throw new Error('API error');
+    }
+  } catch (e) {
+    status.className = 'submit-status error';
+    status.textContent = `⚠️ 上傳失敗，請截圖此頁面傳給倪倪。分數：${score}/10`;
+  }
+}
+
+// ── RESTART ──
+function restartQuiz() {
+  current = 0; score = 0; answers = [];
+  document.getElementById('correctCount').textContent = 0;
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('name-screen').style.display = 'flex';
+  document.getElementById('nameInput').value = '';
+  document.getElementById('startBtn').disabled = true;
+}
+</script>
+</body>
+</html>
