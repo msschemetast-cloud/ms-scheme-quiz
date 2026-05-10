@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>私密專屬美學健檢表 · La Prime</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --white: #FFFFFF;
+  --ivory: #FDF9F6;
+  --blush: #F9EEE8;
+  --pink-light: #F5DDD5;
+  --pink: #E8B4A4;
+  --rose: #C9896E;
+  --rose-deep: #A86B52;
+  --gold: #C8A882;
+  --gold-light: #E8D5B8;
+  --text: #3A2820;
+  --text-mid: #6B4E42;
+  --text-soft: #9B7B6E;
+  --border: #EDD8CC;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--ivory);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ── DECORATIVE BG ── */
+body::before {
+  content: '';
+  position: fixed;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,180,164,0.18) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -150px; left: -150px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,168,130,0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HERO HEADER ── */
+header {
+  position: relative;
+  background: linear-gradient(160deg, #fff 0%, #FDF0EA 50%, #F8E4D8 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.header-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.header-deco svg { width: 100%; height: 100%; }
+
+.header-inner {
+  position: relative;
+  z-index: 2;
+  padding: 48px 24px 40px;
+  text-align: center;
+}
+
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid var(--gold-light);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.8);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.brand-badge::before, .brand-badge::after {
+  content: '◇';
+  font-size: 8px;
+}
+
+header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+header h1 em { color: var(--rose); font-style: italic; }
+
+.header-en {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.header-desc {
+  font-size: 13.5px;
+  color: var(--text-mid);
+  line-height: 1.9;
+  max-width: 380px;
+  margin: 0 auto 20px;
+  font-weight: 300;
+}
+
+.privacy-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid var(--pink-light);
+  border-radius: 20px;
+  font-size: 11.5px;
+  color: var(--text-soft);
+  letter-spacing: 0.04em;
+}
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  background: var(--pink-light);
+  height: 3px;
+  position: relative;
+  z-index: 1;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose), var(--gold));
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* ── MAIN ── */
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 20px 100px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── SECTION ── */
+.section {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 20px rgba(58,40,32,0.05);
+}
+
+.section-head {
+  background: linear-gradient(135deg, var(--blush), #fff);
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.section-num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rose), var(--gold));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: #fff;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 0.04em;
+}
+.section-subtitle {
+  font-size: 11px;
+  color: var(--text-soft);
+  margin-top: 2px;
+  letter-spacing: 0.06em;
+}
+
+.section-body { padding: 20px 24px 24px; }
+
+/* ── BASIC INFO ── */
+.info-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.info-row.single { grid-template-columns: 1fr; }
+.field-wrap { display: flex; flex-direction: column; gap: 6px; }
+.field-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  font-weight: 500;
+}
+.field-input {
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--ivory);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field-input:focus {
+  border-color: var(--rose);
+  box-shadow: 0 0 0 3px rgba(201,137,110,0.1);
+}
+.field-input::placeholder { color: var(--text-soft); opacity: 0.5; }
+
+/* ── QUESTION ── */
+.question { margin-bottom: 22px; }
+.question:last-child { margin-bottom: 0; }
+.q-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.65;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 8px;
+}
+.q-no {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  color: var(--rose);
+  min-width: 22px;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+.q-content { display: flex; flex-direction: column; gap: 3px; }
+.q-multi-tag {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  background: var(--gold-light);
+  padding: 2px 8px;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+/* ── CHIPS ── */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 9px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: #fff;
+  font-size: 13px;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.chip:hover { border-color: var(--pink); color: var(--rose); }
+.chip.on {
+  border-color: var(--rose);
+  background: linear-gradient(135deg, #FDF0EA, #FAE8DF);
+  color: var(--rose-deep);
+  font-weight: 500;
+}
+
+/* ── TEXTAREA ── */
+.q-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--ivory);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: none;
+}
+.q-textarea:focus {
+  border-color: var(--rose);
+  box-shadow: 0 0 0 3px rgba(201,137,110,0.1);
+}
+.q-textarea::placeholder { color: var(--text-soft); opacity: 0.5; }
+
+/* ── DIVIDER ── */
+.q-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0;
+  opacity: 0.5;
+}
+
+/* ── SUBMIT ── */
+.submit-wrap { margin-top: 24px; }
+.submit-btn {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(201,137,110,0.3);
+}
+.submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(201,137,110,0.4); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.submit-note { font-size: 11.5px; color: var(--text-soft); text-align: center; margin-top: 10px; line-height: 1.6; }
+
+.status-box {
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+  display: none;
+}
+.status-box.sending { background: #FDF6F0; border: 1px solid var(--border); color: var(--text-soft); display: block; }
+.status-box.success { background: #F2F9F4; border: 1px solid #9EC9A4; color: #4A7E52; display: block; }
+.status-box.error   { background: #FDF3F1; border: 1px solid #E8A8A0; color: #A05050; display: block; }
+
+/* ── THANK YOU ── */
+#ty-screen {
+  display: none;
+  text-align: center;
+  padding: 60px 20px;
+  animation: fadeUp 0.6s ease;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(16px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.ty-rose {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blush), var(--pink-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 24px;
+  box-shadow: 0 8px 32px rgba(232,180,164,0.4);
+}
+.ty-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.ty-name { color: var(--rose); font-style: italic; }
+.ty-line {
+  width: 40px; height: 1px;
+  background: linear-gradient(90deg, var(--rose), var(--gold));
+  margin: 20px auto;
+}
+.ty-desc {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 2;
+  max-width: 360px;
+  margin: 0 auto;
+  font-weight: 300;
+}
+.ty-sign {
+  margin-top: 24px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--gold);
+  font-style: italic;
+}
+
+@media (max-width: 480px) {
+  header h1 { font-size: 24px; }
+  .section-body { padding: 16px 16px 20px; }
+  .info-row { grid-template-columns: 1fr; }
+  .chip { font-size: 12px; padding: 8px 13px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-deco">
+    <svg viewBox="0 0 400 280" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="350" cy="40" r="120" fill="rgba(232,180,164,0.12)"/>
+      <circle cx="20" cy="200" r="80" fill="rgba(200,168,130,0.1)"/>
+      <circle cx="200" cy="260" r="60" fill="rgba(245,221,213,0.15)"/>
+      <circle cx="380" cy="180" r="50" fill="rgba(232,180,164,0.08)"/>
+    </svg>
+  </div>
+  <div class="header-inner">
+    <div class="brand-badge">MS Scheme · La Prime</div>
+    <h1>私密專屬<br><em>美學健檢表</em></h1>
+    <div class="header-en">Intimate Care Personal Assessment</div>
+    <p class="header-desc">
+      為了能更精準了解妳目前的狀況<br>
+      給妳量身打造最有效的高效保養方案<br>
+      請放心填寫以下問題
+    </p>
+    <div class="privacy-chip">🔒 妳提供的資訊僅供專業顧問診斷使用</div>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<main>
+<div id="survey-screen">
+
+  <!-- 基本資料 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">✦</div>
+      <div>
+        <div class="section-title">基本資料</div>
+        <div class="section-subtitle">Basic Information</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="info-row">
+        <div class="field-wrap">
+          <div class="field-label">姓名 *</div>
+          <input class="field-input" id="f-name" type="text" placeholder="請輸入姓名" oninput="calcProgress()"/>
+        </div>
+        <div class="field-wrap">
+          <div class="field-label">生日</div>
+          <input class="field-input" id="f-birthday" type="text" placeholder="例：1990/01/01"/>
+        </div>
+      </div>
+      <div class="info-row single">
+        <div class="field-wrap">
+          <div class="field-label">聯絡電話</div>
+          <input class="field-input" id="f-phone" type="text" placeholder="請輸入手機號碼"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第一部分 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">一</div>
+      <div>
+        <div class="section-title">身體的小情緒</div>
+        <div class="section-subtitle">Physical Symptoms</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">1.</span><div class="q-content"><span>私密處是否常有不舒服狀況？</span><span class="q-multi-tag">可多選</span></div></div>
+        <div class="chips" data-q="q1" data-multi="true">
+          <div class="chip" onclick="pick(this)">A. 悶感</div>
+          <div class="chip" onclick="pick(this)">B. 搔癢</div>
+          <div class="chip" onclick="pick(this)">C. 分泌物多</div>
+          <div class="chip" onclick="pick(this)">D. 乾澀</div>
+          <div class="chip" onclick="pick(this)">E. 異味</div>
+          <div class="chip" onclick="pick(this)">F. 無</div>
+          <div class="chip" onclick="pick(this)">G. 其他</div>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">2.</span><div class="q-content"><span>分泌物常見顏色？</span></div></div>
+        <div class="chips" data-q="q2">
+          <div class="chip" onclick="pick(this)">A. 透明</div>
+          <div class="chip" onclick="pick(this)">B. 白色</div>
+          <div class="chip" onclick="pick(this)">C. 黃色</div>
+          <div class="chip" onclick="pick(this)">D. 灰綠</div>
+          <div class="chip" onclick="pick(this)">E. 豆腐渣狀</div>
+          <div class="chip" onclick="pick(this)">F. 其他</div>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">3.</span><div class="q-content"><span>不舒服狀況是否規律性反覆出現？</span><span class="q-multi-tag">可多選</span></div></div>
+        <div class="chips" data-q="q3" data-multi="true">
+          <div class="chip" onclick="pick(this)">A. 生理期前後</div>
+          <div class="chip" onclick="pick(this)">B. 熬夜壓力大後</div>
+          <div class="chip" onclick="pick(this)">C. 性行為後</div>
+          <div class="chip" onclick="pick(this)">D. 偶爾發生</div>
+          <div class="chip" onclick="pick(this)">E. 無</div>
+          <div class="chip" onclick="pick(this)">F. 其他</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 第二部分 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">二</div>
+      <div>
+        <div class="section-title">生活節奏與環境</div>
+        <div class="section-subtitle">Lifestyle & Environment</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">4.</span><div class="q-content"><span>近期是否壓力較大、作息不穩，或覺得免疫力下降？</span></div></div>
+        <div class="chips" data-q="q4">
+          <div class="chip" onclick="pick(this)">A. 是</div>
+          <div class="chip" onclick="pick(this)">B. 否</div>
+          <div class="chip" onclick="pick(this)">C. 其他</div>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">5.</span><div class="q-content"><span>妳的工作習慣？</span><span class="q-multi-tag">可多選</span></div></div>
+        <div class="chips" data-q="q5" data-multi="true">
+          <div class="chip" onclick="pick(this)">A. 久坐</div>
+          <div class="chip" onclick="pick(this)">B. 久站</div>
+          <div class="chip" onclick="pick(this)">C. 常穿緊身褲</div>
+          <div class="chip" onclick="pick(this)">D. 環境悶熱</div>
+          <div class="chip" onclick="pick(this)">E. 其他</div>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">6.</span><div class="q-content"><span>目前是否有除毛習慣？</span></div></div>
+        <div class="chips" data-q="q6">
+          <div class="chip" onclick="pick(this)">A. 雷射/熱蠟全除</div>
+          <div class="chip" onclick="pick(this)">B. 自行修剪</div>
+          <div class="chip" onclick="pick(this)">C. 無除毛習慣</div>
+          <div class="chip" onclick="pick(this)">D. 其他</div>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">7.</span><div class="q-content"><span>每天的飲水量大約是多少 c.c.？</span></div></div>
+        <textarea class="q-textarea" id="q7" rows="2" placeholder="例：1500 c.c."></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 第三部分 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">三</div>
+      <div>
+        <div class="section-title">親密生活的感受</div>
+        <div class="section-subtitle">Intimate Life Experience</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">8.</span><div class="q-content"><span>在親密互動時，是否曾感到乾澀、摩擦不適，或需要較長時間進入狀況？</span></div></div>
+        <div class="chips" data-q="q8">
+          <div class="chip" onclick="pick(this)">A. 經常</div>
+          <div class="chip" onclick="pick(this)">B. 偶爾</div>
+          <div class="chip" onclick="pick(this)">C. 從未有此狀況</div>
+          <div class="chip" onclick="pick(this)">D. 其他</div>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">9.</span><div class="q-content"><span>親密行為結束後，是否容易感覺到悶癢、發炎或微弱刺痛感？</span></div></div>
+        <div class="chips" data-q="q9">
+          <div class="chip" onclick="pick(this)">A. 是</div>
+          <div class="chip" onclick="pick(this)">B. 否</div>
+          <div class="chip" onclick="pick(this)">C. 其他</div>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">10.</span><div class="q-content"><span>對於目前的緊緻度或外觀色澤，會希望有更進階的提升嗎？</span></div></div>
+        <div class="chips" data-q="q10">
+          <div class="chip" onclick="pick(this)">A. 是</div>
+          <div class="chip" onclick="pick(this)">B. 否</div>
+          <div class="chip" onclick="pick(this)">C. 其他</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 第四部分 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">四</div>
+      <div>
+        <div class="section-title">保養期待值</div>
+        <div class="section-subtitle">Care Expectations</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">11.</span><div class="q-content"><span>目前最想優先改善的問題是？</span><span class="q-multi-tag">可多選</span></div></div>
+        <div class="chips" data-q="q11" data-multi="true">
+          <div class="chip" onclick="pick(this)">發炎</div>
+          <div class="chip" onclick="pick(this)">分泌物多</div>
+          <div class="chip" onclick="pick(this)">異味</div>
+          <div class="chip" onclick="pick(this)">乾澀</div>
+          <div class="chip" onclick="pick(this)">搔癢</div>
+          <div class="chip" onclick="pick(this)">性生活品質</div>
+          <div class="chip" onclick="pick(this)">單純保養</div>
+          <div class="chip" onclick="pick(this)">其他</div>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="question">
+        <div class="q-text"><span class="q-no">12.</span><div class="q-content"><span>過去嘗試過什麼樣的私密保養？效果如何呢？</span></div></div>
+        <textarea class="q-textarea" id="q12" rows="3" placeholder="請描述過去的使用經驗，或填「無」..."></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-wrap">
+    <button class="submit-btn" id="submitBtn" onclick="doSubmit()">送出我的健檢表 🌸</button>
+    <p class="submit-note">填寫完成後，專屬顧問將盡快為妳提供個人化建議<br>私密處的保養，是找回妳對身體的主控權 ✨</p>
+    <div class="status-box" id="statusBox"></div>
+  </div>
+
+</div>
+
+<!-- THANK YOU -->
+<div id="ty-screen">
+  <div class="ty-rose">🌸</div>
+  <div class="ty-title">謝謝妳，<span class="ty-name" id="tyName"></span></div>
+  <div class="ty-line"></div>
+  <div class="ty-desc">
+    妳的健檢表已成功送出。<br><br>
+    我們會仔細閱讀妳的每一個回答，<br>
+    並在最短時間內為妳提供<br>
+    <strong style="color:var(--rose)">專屬的私密保養建議</strong>。
+  </div>
+  <div class="ty-sign">— MS Scheme 專屬顧問團隊</div>
+</div>
+
+</main>
+
+<script>
+const WEBHOOK = 'https://script.google.com/macros/s/AKfycbzva5IY8tj4XJwUsnCdiPQ2BZagE7K5vTcjiKBScNO3yl0DAWpiLqpKkxgLAfJxygPMTA/exec';
+
+function pick(el) {
+  const group = el.closest('.chips');
+  const isMulti = group.dataset.multi === 'true';
+  if (!isMulti) group.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  el.classList.toggle('on');
+  calcProgress();
+}
+
+function getVal(qId) {
+  const g = document.querySelector(`[data-q="${qId}"]`);
+  if (!g) return '未填';
+  const sel = [...g.querySelectorAll('.chip.on')].map(c => c.textContent.trim());
+  return sel.length ? sel.join('、') : '未填';
+}
+
+function calcProgress() {
+  const name = document.getElementById('f-name').value.trim();
+  const pct = name ? 20 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+async function doSubmit() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { alert('請填寫姓名！'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  const box = document.getElementById('statusBox');
+  btn.disabled = true;
+  box.className = 'status-box sending';
+  box.textContent = '⏳ 送出中，請稍候...';
+
+  const now = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
+  const row = [
+    now, name,
+    document.getElementById('f-birthday').value || '未填',
+    document.getElementById('f-phone').value || '未填',
+    getVal('q1'), getVal('q2'), getVal('q3'),
+    getVal('q4'), getVal('q5'), getVal('q6'),
+    document.getElementById('q7').value || '未填',
+    getVal('q8'), getVal('q9'), getVal('q10'),
+    getVal('q11'),
+    document.getElementById('q12').value || '未填',
+  ];
+
+  try {
+    const res = await fetch(WEBHOOK, { method: 'POST', body: JSON.stringify({ row, sheet: '客戶問卷' }) });
+    const data = await res.json();
+    if (data.status === 'ok') {
+      document.getElementById('progressFill').style.width = '100%';
+      document.getElementById('survey-screen').style.display = 'none';
+      document.getElementById('ty-screen').style.display = 'block';
+      document.getElementById('tyName').textContent = name;
+    } else { throw new Error(); }
+  } catch {
+    box.className = 'status-box error';
+    box.textContent = '⚠️ 送出失敗，請截圖傳給顧問，或稍後再試。';
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
